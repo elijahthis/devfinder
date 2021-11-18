@@ -6,12 +6,14 @@ const SearchBar = (props) => {
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
-    userName = ev.target[0].value;
+    userName = ev.target[0].value.trim();
     ev.target[0].value = "";
 
-    fetch(`https://api.github.com/users/${userName}`)
-      .then((res) => (res = res.json()))
-      .then((result) => props.handleSubmit(result));
+    if (userName !== "") {
+      fetch(`https://api.github.com/users/${userName}`)
+        .then((res) => (res = res.json()))
+        .then((result) => props.handleSubmit(result));
+    }
   };
 
   return (

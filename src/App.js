@@ -2,7 +2,7 @@ import "./App.css";
 import React, { Component } from "react";
 import SearchBar from "./components/searchBar";
 import UserCard from "./components/userCard";
-// import ErrorMessage from "./components/errorMessage";
+import ErrorMessage from "./components/errorMessage";
 
 import profileImage from "./images/profile-placeholder.jpg";
 
@@ -25,28 +25,15 @@ class App extends Component {
     super();
     this.state = {
       user: baseData,
-      togInd: 0, //dark mode default
+      togInd: parseInt(localStorage.getItem("theme")), //dark mode default
     };
   }
 
   updateData = (data) => {
-    const {
-      name,
-      login,
-      bio,
-      created_at,
-      avatar_url,
-      public_repos,
-      followers,
-      following,
-      location,
-      twitter_username,
-      blog,
-      company,
-    } = data;
-
-    this.setState(() => {
-      const newData = {
+    if (data.message === "Not Found") {
+      this.showPop();
+    } else {
+      const {
         name,
         login,
         bio,
@@ -59,21 +46,50 @@ class App extends Component {
         twitter_username,
         blog,
         company,
-      };
-      for (let p in newData) {
-        if (!newData[p] && newData[p] !== 0) {
-          newData[p] = "Not Available";
+      } = data;
+
+      this.setState(() => {
+        const newData = {
+          name,
+          login,
+          bio,
+          created_at,
+          avatar_url,
+          public_repos,
+          followers,
+          following,
+          location,
+          twitter_username,
+          blog,
+          company,
+        };
+        for (let p in newData) {
+          if (!newData[p] && newData[p] !== 0) {
+            newData[p] = "Not Available";
+          }
         }
-      }
-      console.log(newData);
-      return {
-        user: newData,
-      };
-    });
+        return {
+          user: newData,
+        };
+      });
+    }
   };
 
   handleToggle = () => {
     this.setState({ togInd: (this.state.togInd + 1) % 2 });
+    localStorage.setItem("theme", (this.state.togInd + 1) % 2);
+  };
+
+  showPop = () => {
+    let errorBox = document.querySelector(".error");
+    errorBox.style.width = "100%";
+    errorBox.style.height = "100%";
+  };
+
+  hidePop = () => {
+    let errorBox = document.querySelector(".error");
+    errorBox.style.width = "0px";
+    errorBox.style.height = "0px";
   };
 
   toggleImg = [
@@ -130,10 +146,12 @@ class App extends Component {
       year: "numeric",
     })}`;
 
-    console.log(result);
     return (
       <main className={this.state.togInd ? "light" : "dark"}>
-        <div className={`App ${this.state.togInd ? "light" : "dark"}`}>
+        <section className="error" onClick={this.hidePop}>
+          <ErrorMessage themeInd={this.state.togInd} />
+        </section>
+        <div className={`App`}>
           <div className="top">
             <h3 className="app-name">devfinder</h3>
             <div className="toggler" onClick={this.handleToggle}>

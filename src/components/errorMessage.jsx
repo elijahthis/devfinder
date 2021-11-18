@@ -1,13 +1,14 @@
 import React from "react";
 import cancelBlack from "../images/cancel-black.png";
+import cancelWhite from "../images/cancel-white.png";
 
-const ErrorMessage = () => {
+const ErrorMessage = (props) => {
   return (
-    <section>
-      <img src={cancelBlack} alt="cancel" />
+    <div className="error-box">
       <h3>Sorry</h3>
       <p>Github User does not exist. Cross-check the name and try again.</p>
-    </section>
+      <img src={props.themeInd ? cancelBlack : cancelWhite} alt="cancel" />
+    </div>
   );
 };
 
