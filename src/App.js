@@ -25,7 +25,7 @@ class App extends Component {
     super();
     this.state = {
       user: baseData,
-      togInd: parseInt(localStorage.getItem("theme")), //dark mode default
+      togInd: parseInt(localStorage.getItem("theme") ?? 0), //dark mode default
     };
   }
 
@@ -97,7 +97,7 @@ class App extends Component {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        enable-background="new 0 0 512 512"
+        enableBackground="new 0 0 512 512"
         fill="white"
       >
         <g>
